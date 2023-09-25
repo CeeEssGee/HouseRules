@@ -51,8 +51,7 @@ public class UserProfileController : ControllerBase
     [Authorize]
     public IActionResult GetByIdWithChores(int id)
     {
-        UserProfile userProfile = _dbContext
-        .UserProfiles
+        UserProfile userProfile = _dbContext.UserProfiles
         .Include(up => up.ChoreAssignments)
         .ThenInclude(upca => upca.Chore)
         .Include(up => up.ChoreCompletions)
