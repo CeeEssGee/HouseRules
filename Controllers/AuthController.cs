@@ -7,7 +7,6 @@ using System.Security.Claims;
 using System.Text;
 using HouseRules.Models;
 using HouseRules.Data;
-using BiancasBikes.Models;
 
 namespace HouseRules.Controllers;
 
