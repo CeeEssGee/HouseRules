@@ -18,7 +18,7 @@ public class ChoreController : ControllerBase
     }
 
     [HttpGet] // route /api/chore
-    // [Authorize] // get all chores
+    [Authorize] // get all chores
     public IActionResult Get()
     {
         return Ok(_dbContext.Chores
@@ -30,13 +30,14 @@ public class ChoreController : ControllerBase
     }
 
     [HttpGet("{id}")] // route /api/chore/{id}
-    // [Authorize] // return chore by id with current assignees and all completions
+    [Authorize] // return chore by id with current assignees and all completions
     public IActionResult GetChoreById(int id)
     {
         Chore chore = _dbContext.Chores
         .Include(c => c.ChoreAssignments)
         .ThenInclude(ca => ca.UserProfile)
         .Include(c => c.ChoreCompletions)
+        .ThenInclude(cc => cc.UserProfile)
         .SingleOrDefault(c => c.Id == id);
 
         if (chore == null)
@@ -47,8 +48,8 @@ public class ChoreController : ControllerBase
         return Ok(chore);
     }
 
-    [HttpPost("{id}")] // route /api/chore/{id}
-    // [Authorize] // complete a chore
+    [HttpPost("{id}/complete")] // route /api/chore/{id}
+    [Authorize] // complete a chore
     public IActionResult CompleteChore(int id, int userId)
     {
         Chore choreToComplete = _dbContext.Chores
@@ -78,7 +79,7 @@ public class ChoreController : ControllerBase
     }
 
     [HttpPost] // /api/chore/
-    // [Authorize(Roles = "Admin")] // admins only, post a new chore 
+    [Authorize(Roles = "Admin")] // admins only, post a new chore 
     public IActionResult CreateChore(Chore chore)
     {
         _dbContext.Chores.Add(chore);
@@ -87,7 +88,7 @@ public class ChoreController : ControllerBase
     }
 
     [HttpPut("{id}")] // /api/chore/{id}
-    // [Authorize(Roles = "Admin")] // admins only, update a chore
+    [Authorize(Roles = "Admin")] // admins only, update a chore
     public IActionResult UpdateChore(int id, Chore updatedChore)
     {
         Chore chore = _dbContext.Chores.SingleOrDefault(c => c.Id == id);
@@ -111,7 +112,7 @@ public class ChoreController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    // [Authorize(Roles = "Admin")] // admins only, delete a chore
+    [Authorize(Roles = "Admin")] // admins only, delete a chore
     public IActionResult DeleteChore(int id)
     {
         Chore choreToDelete = _dbContext.Chores.SingleOrDefault(c => c.Id == id);
@@ -127,7 +128,7 @@ public class ChoreController : ControllerBase
     }
 
     [HttpPost("{id}/assign")]
-    // [Authorize(Roles = "Admin")] // admins only, assign a chore to a user
+    [Authorize(Roles = "Admin")] // admins only, assign a chore to a user
     public IActionResult AssignChore(int id, int userId)
     {
         Chore choreToAssign = _dbContext.Chores.SingleOrDefault(c => c.Id == id);
@@ -150,7 +151,7 @@ public class ChoreController : ControllerBase
     }
 
     [HttpPost("{id}/unassign")]
-    // [Authorize(Roles = "Admin")] // admins only, assign a chore to a user
+    [Authorize(Roles = "Admin")] // admins only, assign a chore to a user
     public IActionResult UnssignChore(int id, int userId)
     {
         Chore choreToUnassign = _dbContext.Chores.SingleOrDefault(c => c.Id == id);
