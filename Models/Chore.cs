@@ -14,5 +14,27 @@ public class Chore
     public int ChoreFrequencyDays { get; set; }
     public List<ChoreAssignment>? ChoreAssignments { get; set; }
     public List<ChoreCompletion>? ChoreCompletions { get; set; }
+    public bool OverdueChore
+    {
+        get
+        {
+            // check to see if there are no ChoreCompletions
+            if (ChoreCompletions == null || ChoreCompletions.Count == 0)
+            {
+                return true;
+            }
+            // get the most recent chore completion date
+            DateTime MostRecentCompletionDate = ChoreCompletions.Max(cc => cc.CompletedOn);
 
+            // if most recent completion date + chore frequency date < today, return true
+            if (MostRecentCompletionDate.AddDays(ChoreFrequencyDays) < DateTime.Now)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
 }

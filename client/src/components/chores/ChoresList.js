@@ -9,12 +9,13 @@ export const ChoresList = ({ loggedInUser }) => {
     const navigate = useNavigate();
 
     const handleComplete = (id) => {
-        completeChore(id, loggedInUser.id);
+        completeChore(id, loggedInUser.id)
+            .then(getChores());
     }
 
     const handleDelete = (id) => {
         deleteChore(id).then(() => {
-            getChores().then(setChores);
+            navigate("/chores");
         })
     }
 
@@ -46,7 +47,7 @@ export const ChoresList = ({ loggedInUser }) => {
                     {chores.map((c) => (
                         <tr key={`chores-${c.id}`}>
                             <th scope="row">{c.id}</th>
-                            {c.choreOverdue
+                            {c.overdueChore
                                 ?
                                 <td style={{ color: "red" }}>{c.name}</td>
                                 :
