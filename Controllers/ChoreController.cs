@@ -54,6 +54,7 @@ public class ChoreController : ControllerBase
     {
         Chore choreToComplete = _dbContext.Chores
         .Include(c => c.ChoreAssignments)
+        .Include(c => c.ChoreCompletions)
         .ThenInclude(ca => ca.UserProfile)
         .SingleOrDefault(c => c.Id == id);
 
@@ -167,6 +168,18 @@ public class ChoreController : ControllerBase
         _dbContext.ChoreAssignments.Remove(choreAssignment);
         _dbContext.SaveChanges();
         return NoContent();
+    }
+
+    [HttpGet("mychores/{userId}")]
+    [Authorize]
+    public IActionResult GetMyChores(int userId)
+    {
+        return Ok(_dbContext
+        .ChoreAssignments
+        .Include(ca => ca.Chore)
+        .ThenInclude(c => c.ChoreCompletions)
+        .Where(ca => ca.UserProfileId == userId)
+        );
     }
 
 }

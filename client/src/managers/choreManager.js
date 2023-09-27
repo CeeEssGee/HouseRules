@@ -8,6 +8,10 @@ export const getChoreById = (choreId) => {
     return fetch(`${_apiUrl}/${choreId}`).then((res) => res.json());
 };
 
+export const getMyChores = (userId) => {
+    return fetch(`${_apiUrl}/mychores/${userId}`).then((res) => res.json());
+};
+
 export const completeChore = (choreId, userId) => {
     return fetch(`${_apiUrl}/${choreId}/complete/?userId=${userId}`, {
         method: "POST",
