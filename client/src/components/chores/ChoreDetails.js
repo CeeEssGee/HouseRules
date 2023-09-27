@@ -11,6 +11,7 @@ export const ChoreDetails = () => {
     const [name, setName] = useState("");
     const [difficulty, setDifficulty] = useState(0);
     const [frequencyDays, setFrequencyDays] = useState(0);
+    const [errors, setErrors] = useState("");
 
     const { choreId } = useParams();
     const navigate = useNavigate();
@@ -19,6 +20,14 @@ export const ChoreDetails = () => {
         getChoreById(choreId).then(setChore);
         getUserProfiles().then(setUsers);
     }, [])
+
+    useEffect(() => {
+        if (chore) {
+            setName(chore.name);
+            setDifficulty(chore.difficulty);
+            setFrequencyDays(chore.choreFrequencyDays);
+        }
+    }, [chore]);
 
     const handleAssignmentCheck = (e, u) => {
         const { checked } = e.target;
@@ -39,7 +48,6 @@ export const ChoreDetails = () => {
                 return true;
             }
         }
-
         return false;
     }
 
@@ -52,10 +60,15 @@ export const ChoreDetails = () => {
             choreFrequencyDays: frequencyDays
         };
 
-        updateChore(choreId, updatedChore).then(() => {
-            navigate("/chores");
+        updateChore(choreId, updatedChore).then((res) => {
+            if (res.errors) {
+                setErrors(res.errors);
+            } else {
+                navigate("/chores");
+            }
         })
     }
+
 
     if (!chore) {
         return null;
@@ -63,11 +76,18 @@ export const ChoreDetails = () => {
 
     return (
         <div className="container">
+            <div style={{ color: "red" }}>
+                {Object.keys(errors).map((key) => (
+                    <p key={key}>
+                        {key}: {errors[key].join(",")}
+                    </p>
+                ))}
+            </div>
             <h2>{chore.name}</h2>
             <Table>
                 <tbody>
                     <tr>
-                        <th scope="row">Difficulty</th>
+                        <th scope="row">Difficulty (1 - 5)</th>
                         <td>
                             <Input
                                 type="select"
@@ -85,8 +105,7 @@ export const ChoreDetails = () => {
                         </td>
                     </tr>
                     <tr>
-                        <th scope="row">Frequency in days</th>
-                        {/* <td>Every {chore.choreFrequencyDays} days</td> */}
+                        <th scope="row">Frequency in days (1 - 14)</th>
                         <td>
                             <Input
                                 list="frequency-numbers"
@@ -103,6 +122,7 @@ export const ChoreDetails = () => {
                                 <option value={10}></option>
                                 <option value={14}></option>
                             </datalist>
+
                         </td>
                     </tr>
                 </tbody>

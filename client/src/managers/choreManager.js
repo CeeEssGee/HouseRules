@@ -27,8 +27,9 @@ export const updateChore = (choreId, updatedChore) => {
     return fetch(`${_apiUrl}/${choreId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedChore),
-    }).then((res) => res.json());
+        body: JSON.stringify(updatedChore)
+        // .then((res) => res.json());     => Don't need because it returns No Content
+    })
 };
 
 export const deleteChore = (id) => {
@@ -41,12 +42,14 @@ export const assignChore = (choreId, userId) => {
     return fetch(`${_apiUrl}/${choreId}/assign?userId=${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+    })
+    // .then((res) => res.json());    => Don't need because it returns No Content
 };
 
 export const unassignChore = (choreId, userId) => {
     return fetch(`${_apiUrl}/${choreId}/unassign?userId=${userId}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-    }).then((res) => res.json());
+    })
+    // .then((res) => res.json());   => Don't need because it returns No Content
 };
