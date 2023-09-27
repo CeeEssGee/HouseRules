@@ -8,6 +8,7 @@ export const CreateChore = () => {
     const [difficulty, setDifficulty] = useState(null);
     const [choreFrequencyDays, setFrequencyDays] = useState(null);
     const [chores, setChores] = useState([]);
+    const [errors, setErrors] = useState([]);
 
     const navigate = useNavigate();
 
@@ -16,11 +17,14 @@ export const CreateChore = () => {
         const newChore = {
             name,
             difficulty,
-            choreFrequencyDays
+            choreFrequencyDays,
         };
-
-        createChore(newChore).then(() => {
-            navigate("/chores");
+        createChore(newChore).then((res) => {
+            if (res.errors) {
+                setErrors(res.errors);
+            } else {
+                navigate("/chores");
+            }
         });
     };
 
@@ -31,6 +35,13 @@ export const CreateChore = () => {
 
     return (
         <>
+            <div style={{ color: "red" }}>
+                {Object.keys(errors).map((key) => (
+                    <p key={key}>
+                        {key}: {errors[key].join(",")}
+                    </p>
+                ))}
+            </div>
             <h2>Create Chore</h2>
             <Form>
                 <FormGroup>

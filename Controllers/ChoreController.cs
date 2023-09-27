@@ -103,8 +103,8 @@ public class ChoreController : ControllerBase
         chore.Name = updatedChore.Name;
         chore.Difficulty = updatedChore.Difficulty;
         chore.ChoreFrequencyDays = updatedChore.ChoreFrequencyDays;
-        chore.ChoreAssignments = updatedChore.ChoreAssignments;
-        chore.ChoreCompletions = updatedChore.ChoreCompletions;
+        // chore.ChoreAssignments = updatedChore.ChoreAssignments;
+        // chore.ChoreCompletions = updatedChore.ChoreCompletions;
 
         _dbContext.SaveChanges();
 
